@@ -1,0 +1,4 @@
+{
+  "base_url": "https://your-provider.example/v1",
+  "key_file": "~/.config/cxp-character-forge/tripo_key"
+}

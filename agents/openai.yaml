@@ -1,0 +1,4 @@
+interface:
+  display_name: "CXP Character Forge"
+  short_description: "参考图人物建模、Tripo 代理生成、Blender 验收与交付"
+  default_prompt: "使用 $cxp-character-forge，按参考立绘生成带贴图人物模型，用 Blender 检查正侧背与旋转效果，再按用途交付。"

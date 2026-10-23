@@ -1,0 +1,11 @@
+{
+  "endpoint": "/tasks",
+  "payload": {
+    "type": "image_to_model",
+    "input": "REPLACE_WITH_FILE_TOKEN",
+    "model": "REPLACE_WITH_MODELS_VALUE",
+    "texture": true,
+    "pbr": false,
+    "texture_quality": "detailed"
+  }
+}

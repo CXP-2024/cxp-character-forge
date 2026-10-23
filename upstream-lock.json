@@ -1,0 +1,10 @@
+{
+  "tripo.py": {
+    "url": "https://raw.githubusercontent.com/SucRunBug/tripo-3d/2162e925f1ed88e00e66346ba2b534237b710c9c/scripts/tripo.py",
+    "sha256": "73aeea8e1c9744dd7f08e0b2de4d9fd64fb29f4c3b20115242f308f0414bb10d"
+  },
+  "inspect_glb.py": {
+    "url": "https://raw.githubusercontent.com/SucRunBug/tripo-3d/2162e925f1ed88e00e66346ba2b534237b710c9c/scripts/inspect_glb.py",
+    "sha256": "c9be4413246cd6e0fafa9edd0183648a6f3a16cdb99227d84448594c7e69f92d"
+  }
+}

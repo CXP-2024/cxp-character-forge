@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+proxy-config.json
+.env
+.env.*
+*.key
+credentials*
+jobs/
+uploads/
+outputs/
+scripts/tripo.py
+scripts/inspect_glb.py
+*.blend
+*.blend1
+*.glb
+*.fbx
+*.zip
