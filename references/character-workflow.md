@@ -29,7 +29,7 @@ Charakuru 用作**方法和工具库**：三视图与部件图、重贴图分组
 | 3 | 灰模 + 原生贴图，看正、侧、背，与设定图对比 | 第一轮就要看贴图：画进皮肤的阴影、双尾巴、假袖子要在这里发现 |
 | 4 | **在同一网格上拆分结构** | 头发、前发、裙子、饰品、五官小件按需分成独立对象；补后脑等被遮挡的区域。拆分只改归属，不移动顶点，所以接缝保持原样 |
 | 5 | **Tripo 重贴图**：对拆好的部件做保形重贴图，再把 UV 转回原网格 | 分组参考 Charakuru 五组（hair / head / upper_body / lower_body / accessories），见 [texture-transfer.md](texture-transfer.md)、[texture-refinement-qa.md](texture-refinement-qa.md)。网格、原 UV、法线保持不变 |
-| 6 | 表情与眼睛 | [eye-brow-expression-workflow.md](eye-brow-expression-workflow.md)、[facial-expressions.md](facial-expressions.md)、[mouth-transfer-vmd-repair.md](mouth-transfer-vmd-repair.md)、[eye-refinement.md](eye-refinement.md)；方法来自 Charakuru `avatar-expression-authoring` |
+| 6 | **表情、眼睛与嘴部** | 三样缺一不可：① 用 Charakuru `avatar-expression-authoring` 的方法论；② 目标角色的脸型不变；③ 有一个参考角色的完整表情网络（形态键）和贴图/口腔结构。没有参考角色就先找用户确认，不要直接开始做，否则表情不对、嘴部全乱。详见 [facial-expressions.md](facial-expressions.md) 开头的“前提”，以及 [eye-brow-expression-workflow.md](eye-brow-expression-workflow.md)、[mouth-transfer-vmd-repair.md](mouth-transfer-vmd-repair.md)、[eye-refinement.md](eye-refinement.md) |
 | 7 | 骨架与权重 | T 型模型可以用 Charakuru `avatar-weight-transfer` 做素体权重迁移，详见 [rigging-physics.md](rigging-physics.md)。之后做抬臂、屈肘、转头、屈膝、握拳和短动作测试 |
 | 8 | 衣服和头发物理 | SpringBone（Charakuru `avatar-spring-setup`）或 Houdini（[houdini-cloth-hair.md](houdini-cloth-hair.md)、[houdini-fullsong-remote.md](houdini-fullsong-remote.md)） |
 | 9 | 交付 | 静态模型、编辑工程、预览和缓存分目录；已完成和未完成的项目逐项如实报告 |
@@ -50,6 +50,7 @@ Charakuru 原版是分别生成“带全部头发的头”和“T 型身体”�
 - **已认可的模型不重新生成**。原文件只读，修改存新副本；改贴图时网格、UV、权重、形态键都不动。
 - **不要把 Charakuru 的权重迁移强套在已经完成的 A 型模型上**。Codex 这样做过，失败了。素体迁移要求 T 型输入，要用就按完整流程准备；否则沿用现有骨架和权重做局部修正。
 - 设定图在提交前先对齐：两张图的臂展、基线、头顶要一致（本地做过“手臂区段水平压缩到与正面同宽、头发和裙子不动”）。图上标注了正、侧、背，不等于真的是同一姿势。
+- **表情不能凭空做**：必须有参考角色的表情网络和贴图，用 Charakuru 方法迁移到不变的原脸上。没有参考角色的表情网络就去推顶点、只建命名滑块，或者用重新生成的网格来做，DeepSeek 都试过，结果是表情不对、嘴部全乱。
 - 尾巴、翅膀这类部件后装：先核对原生件的根部、尖端和轴向，再缩放、旋转到真实的连接位置。
 - 每一步都要看灰模：结构问题（后脑鼓包、颈部锯齿、指缝粘连、裙子穿模）在贴图渲染里容易被盖住。
 - 生成和修改都存新版本目录，记录 Tripo 任务 ID、请求参数和输入图，方便以后从同一个起点重做。
