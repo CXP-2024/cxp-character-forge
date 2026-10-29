@@ -1,6 +1,6 @@
 # 眼睛精细化：对齐 MMD / 原神 PMX 的观感
 
-适用：Tripo / Charakuru 人物（例：DeepSeek 鲸娘）眼睛与奥黛塔、沃雅妮莎等 MMD 原生眼睛同框时显得"平、糊、瞪"。2026-10-29 在一个双人 MMD 场景复刻项目中做成并经用户逐项认可（v15 眼睑阴影、v16 分层瞳孔、v17 发光闪点）。核心原则：**照原贴图拆层、按原位置重绘，不重画一双新眼睛**；每步都出同机位"改前/改后"对比，用户确认后再换。
+适用：Tripo / Charakuru 人物（例：DeepSeek 鲸娘）眼睛与奥黛塔、沃雅妮莎等 MMD 原生眼睛同框时显得"平、糊、瞪"。2026-10-29 在 `H:/MV_making/天天天国/aibo_replica` 做成并经用户逐项认可（v15 眼睑阴影、v16 分层瞳孔、v17 发光闪点）。核心原则：**照原贴图拆层、按原位置重绘，不重画一双新眼睛**；每步都出同机位"改前/改后"对比，用户确认后再换。
 
 ## 先做对比，再动手
 
@@ -29,7 +29,7 @@
 ## 发光与闪点（v17，用户认可）
 
 - `iris_sparkle_v17.py`：下方亮区上缘放 3 颗大小、位置错开的菱形闪点 + 两颗边缘小圆点（白偏青）。**不要在高光外画青色圆圈**——用户明确否掉（`RIM = False`）。
-- `ds_iris_glow.py -- OUT.blend [glitter=0.45] [glass=0.35] [emit=1.15]`：闪点层 alpha 叠加；参考 MMD 模型自带的 `tex/sp2_6.png`（彩色碎光）和 `spa/Eye_s.png`（玻璃球面，目录由 `REF_PMX_DIR` 指定，第三方素材不随本仓库分发）按视空间法线 matcap ADD；虹膜 emission ×1.15 让后期泛光带出一点光晕。静帧变化含蓄，动起来才"闪"。
+- `ds_iris_glow.py -- OUT.blend [glitter=0.45] [glass=0.35] [emit=1.15]`：闪点层 alpha 叠加；奥黛塔 PMX 的 `tex/sp2_6.png`（彩色碎光）和 `spa/Eye_s.png`（玻璃球面）按视空间法线 matcap ADD；虹膜 emission ×1.15 让后期泛光带出一点光晕。静帧变化含蓄，动起来才"闪"。
 
 ## 不要做 / 已否定
 
@@ -40,6 +40,10 @@
 
 - 静止姿势单眼四宫格（奥黛塔 / 沃雅妮莎 / 改前 / 改后）+ 两个舞蹈近景（如 #300、#420）同机位前后对比。
 - 双人时两个 DeepSeek 共用 Iris/EyeWhite 材质与网格，改一次两人都生效；确认第二人不是集合实例（实例会逃出灯光链接，着色不同）。
-- 拆层贴图写在 `layered_v16/`（`EYE_LAYER_DIR` 可改），blend 引用外部文件：重新生成贴图后已打开的 Blender 需重载图片。
+- 贴图写在 `H:/MV_making/assets/DeepSeek_V7Route_Tpose/bodytex/eyes/layered_v16/`，blend 引用外部文件：重新生成贴图后已打开的 Blender 需重载图片。
 
-脚本内的骨骼名（`mixamorig:*`、`LeftEye/RightEye`、`CharaKit_Weights_*_Rig`）、材质名（`Iris_L/R`、`EyeWhite_L/R`）是示例项目的值，贴图目录用环境变量 `EYE_LAYER_DIR` / `REF_PMX_DIR` 指定；用于其他模型先改这些，再按上面的顺序逐步出对比。
+脚本内的路径、骨骼名（`mixamorig:*`、`LeftEye/RightEye`、`CharaKit_Weights_*_Rig`）、材质名（`Iris_L/R`、`EyeWhite_L/R`）和奥黛塔贴图路径是本项目值；用于其他模型先改这些，再按上面的顺序逐步出对比。
+
+## 眼部不要描边
+
+原生 MMD 描边（mmd_tools 的 `mmd_edge_preview` Solidify 反向外壳）不能覆盖会动的眼部。闭眼、笑眼、wink 时眼皮折叠，很薄的描边外壳会在眼睑处露出成堆的锯齿暗线（爱包第 2609 帧）。做法：把所有眼、眉形态键会移动的顶点再向外扩 2 圈，在 `mmd_edge_preview` 顶点组里把权重设为 0；脸的外轮廓描边保留。脚本见 `scripts/eye_refine/ds_eye_noedge.py`（对象名按项目修改）。验收时同一帧对比描边开、关的特写，两者应该基本一致。
