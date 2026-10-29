@@ -9,7 +9,7 @@ description: 从参考立绘通过 Tripo 兼容代理生成带贴图的 3D 人�
 
 ## 任务与参考
 
-尊重用户确认的设计、比例、定稿版本与静态/动画用途。先查已有资产和任务记录，避免重复生成。根据实际需求选择整个人物或分件；不要求所有角色先拆头、身体和头发。分件与 MMD 细节见 [人物流程](references/character-workflow.md)。与 MMD / 原神 PMX 角色同框时的眼睛精细化（眼白上睑阴影、分层瞳孔、发光闪点）见 [眼睛精细化](references/eye-refinement.md)，脚本在 `scripts/eye_refine/`。Houdini 无界面裙发解算见 [houdini-cloth-hair](references/houdini-cloth-hair.md)；整首分段解算、已认可段只解后段拼接、远端 Linux 安装授权与分块整理见 [houdini-fullsong-remote](references/houdini-fullsong-remote.md)，脚本在 `scripts/houdini_song/`。
+尊重用户确认的设计、比例、定稿版本与静态/动画用途。先查已有资产和任务记录，避免重复生成。根据实际需求选择整个人物或分件；不要求所有角色先拆头、身体和头发。分件与 MMD 细节见 [人物流程](references/character-workflow.md)。与 MMD / 原神 PMX 角色同框时的眼睛精细化（眼白上睑阴影、分层瞳孔、发光闪点）见 [眼睛精细化](references/eye-refinement.md)，脚本在 `scripts/eye_refine/`。Houdini 无界面裙发解算见 [houdini-cloth-hair](references/houdini-cloth-hair.md)；整首分段解算、已认可段只解后段拼接、真实多层裙解算（层间缝合、裙撑、灰模验收）、远端 Linux 安装、授权按机器占用的规则与分块整理见 [houdini-fullsong-remote](references/houdini-fullsong-remote.md)，脚本在 `scripts/houdini_song/`。
 
 先核对 A/T 姿态、头身比例、手指、前后轮廓与遮挡。多视图必须同角色同姿态；不可靠侧背图不应强行参与生成。隐藏面属于补全假设。
 
