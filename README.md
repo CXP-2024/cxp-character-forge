@@ -20,7 +20,7 @@
 | 7. 物理 | 真实多层裙的 Houdini Vellum 解算（层间缝合、裙撑），整首分段并行解算，远端 Linux 机器的安装与授权 | [houdini-cloth-hair](references/houdini-cloth-hair.md)、[houdini-fullsong-remote](references/houdini-fullsong-remote.md) |
 | 8. 渲染 | 原神风格的三渲二：面部 UV、眼睛分层、服装 ramp、原生 MMD 描边 | 姊妹 skill [genshin-blender-render](https://github.com/CXP-2024/genshin-blender-render) |
 
-每个阶段都要求用灰模加最终材质验收，在同一相机下与参考对比，原始资产只读、修改另存新版本。
+制作期间二次元角色默认用原神式快速三渲二材质（EEVEE 下几秒一帧，方便反复迭代），最后一步才用渲染 skill 做精细渲染。每个阶段都要求用灰模加这套材质验收，在同一相机下与参考对比，原始资产只读、修改另存新版本。
 
 ## 推荐安装
 

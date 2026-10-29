@@ -26,12 +26,12 @@ Charakuru 用作**方法和工具库**：三视图与部件图、重贴图分组
 | --- | --- | --- |
 | 1 | **设定图**：整理用户立绘，得到同一姿势、同一尺度的 T 型正面和背面（侧面可靠才加） | 两张图的脚底基线、头顶、臂展像素对齐；尾巴、翅膀这类可以后装的部件先去掉；背面头发用已认可的版本。Charakuru 的 `character-three-views` 可以参考 |
 | 2 | **整体一次生成**：用 multiview_to_model 一次生成整个人物（含头、头发、身体、衣服） | 本地有效参数：face_limit 25000、quad、texture detailed、pbr false，只给正背两张图。**不要把头和身体分开生成**。**每次只提交 1 个生成任务，不并行，也不多次抽卡**：整体生成非常耗积分；等这一个检查完、确认需要时才重新生成（和 Charakuru 一次出多个候选再挑的做法不同） |
-| 3 | **灰模 + 网格结构检查，并当场试拆组件** | 拿到模型立刻看灰模和线框，手动检查各部分网格是否合理，并**在这一步就尝试拆出头、头发（含刘海）、饰品、裙子等组件**，看拆完的效果。比如刘海和头、头发和脸、裙子和腿粘成一块拆不开，或者拆开后缺面、破洞，就说明这次网格不合格，要改设定图后重新生成（仍然一次一个），不要带着问题往后做。原生贴图也在这一轮一起看 |
+| 3 | **灰模 + 网格结构检查，并当场试拆组件** | 拿到模型立刻看灰模和线框，手动检查各部分网格是否合理，并**在这一步就尝试拆出头、头发（含刘海）、饰品、裙子等组件**，看拆完的效果。比如刘海和头、头发和脸、裙子和腿粘成一块拆不开，或者拆开后缺面、破洞，就说明这次网格不合格，要改设定图后重新生成（仍然一次一个），不要带着问题往后做。原生贴图也在这一轮一起看。组件要拆细，清单与拆法见 [component-texturing.md](component-texturing.md) |
 | 4 | **快速绑定 + 骨架校验** | 结构通过后马上绑定，这一步花时间少、能很快发现问题。T 型模型可以用 Charakuru `avatar-weight-transfer` 做素体权重迁移，见 [rigging-physics.md](rigging-physics.md)。然后套一段现成的简单 MMD 动作（例如《愛包ダンスホール》），检查肩、肘、腕、手指、膝、颈有没有扭曲或撕裂，裙子和头发有没有跟错骨骼；发现问题就让 AI 修骨骼节点位置和权重，修好再往下做 |
-| 5 | **Tripo 重贴图**（最耗时间，放在结构和骨架都确认之后）：对拆好的部件做保形重贴图，再把 UV 转回原网格 | 分组参考 Charakuru 五组（hair / head / upper_body / lower_body / accessories），见 [texture-transfer.md](texture-transfer.md)、[texture-refinement-qa.md](texture-refinement-qa.md)。网格、原 UV、法线、权重保持不变 |
+| 5 | **Tripo 重贴图**（最耗时间，放在结构和骨架都确认之后）：对拆好的部件做保形重贴图，再把 UV 转回原网格 | 分组参考 Charakuru 五组（hair / head / upper_body / lower_body / accessories），见 [texture-transfer.md](texture-transfer.md)、[texture-refinement-qa.md](texture-refinement-qa.md)。网格、原 UV、法线、权重保持不变。**按组件选方法**（Tripo / Codex 投影 / 几何生成 / 平涂），送 Tripo 前先自展 UV，见 [component-texturing.md](component-texturing.md) |
 | 6 | **表情、眼睛与嘴部** | 三样缺一不可：① 用 Charakuru `avatar-expression-authoring` 的方法论；② 目标角色的脸型不变；③ 有一个参考角色的完整表情网络（形态键）和贴图/口腔结构。没有参考角色就先找用户确认，不要直接开始做，否则表情不对、嘴部全乱。详见 [facial-expressions.md](facial-expressions.md) 开头的“前提”，以及 [eye-brow-expression-workflow.md](eye-brow-expression-workflow.md)、[mouth-transfer-vmd-repair.md](mouth-transfer-vmd-repair.md)、[eye-refinement.md](eye-refinement.md) |
 | 7 | **物理**（最后做）：衣服和头发 | SpringBone（Charakuru `avatar-spring-setup`）或 Houdini（[houdini-cloth-hair.md](houdini-cloth-hair.md)、[houdini-fullsong-remote.md](houdini-fullsong-remote.md)）。依赖最终网格和骨架，所以放在最后 |
-| 8 | 交付 | 静态模型、编辑工程、预览和缓存分目录；已完成和未完成的项目逐项如实报告 |
+| 8 | **精细渲染与交付** | 前面各步都用原神式快速材质加灰模检查（见下文）；到这一步才用 [genshin-blender-render](https://github.com/CXP-2024/genshin-blender-render) 做精细渲染。之后再交付：静态模型、编辑工程、预览和缓存分目录；已完成和未完成的项目逐项如实报告 |
 
 **顺序的理由**：越便宜、越快能发现问题的检查越往前放。网格结构不对就只能重新生成，而骨架问题套一段动作就能暴露；先把这两样确认好，再花大量时间做重贴图和表情，最后做依赖最终网格与骨架的物理。这样不会在一个结构有问题的模型上白做贴图。
 
@@ -45,6 +45,14 @@ Charakuru 原版是分别生成“带全部头发的头”和“T 型身体”�
 - 两边的拓扑没有对应关系，很难做出连续的皮肤，也就不好绑骨和刷权重。
 
 整体一次生成时，头、颈、身体本来就是一张连续的网格，比例也一致。需要分件时，在这张网格上拆分（第 3 步试拆），再用重贴图补细节（第 5 步）。只有用户明确要求按 Charakuru 原流程制作时，才走分头身路线，并且要说明颈部焊接是主要风险。
+
+## 制作期间默认用原神式快速材质
+
+二次元角色在制作和迭代期间（拆件、绑定、重贴图、表情、物理检查），默认用一套简单的原神式三渲二材质，不要每次都上精细渲染：
+
+- **做法**：贴图颜色 × 两色阴影。Diffuse → Shader to RGB → 灰度 → smoothstep（约 0.03–0.09）得到明暗分界；暗部乘上皮肤、头发、布料各自的阴影色，可再加一点边缘光。眼白、虹膜保持无光照。全部材质无光照的版本可以用 `scripts/component_tex/unlit_all.py`。
+- **好处**：EEVEE 下渲染很快，检查一帧只要几秒；外观也接近最终的原神风格，看贴图、表情和穿模不会被复杂光照干扰。和灰模一起，构成每一步的标准检查。
+- **只在最后一步**才用渲染 skill [genshin-blender-render](https://github.com/CXP-2024/genshin-blender-render) 做精细渲染：面部 UV 阴影、眼睛分层、服装 ramp、原生 MMD 描边、合成。精细渲染期间如果发现模型问题，回到对应步骤修，再用快速材质确认。
 
 ## 经验与禁忌
 
