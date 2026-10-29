@@ -18,21 +18,22 @@
 
 版本号、素材许可和第三方说明见 kit 里的 `LICENSE` 和 `THIRD_PARTY_NOTICES.md`。复制或发布之前先核对；不要把它的人体、表情素材打包进其他仓库。
 
-Charakuru 用作**方法和工具库**：三视图与部件图、重贴图分组、对应面恢复 UV、素体权重迁移、表情拟合、SpringBone 检查。本路线和它有一处关键不同，见第 2 步。
+Charakuru 用作**方法和工具库**：三视图与部件图、重贴图分组、对应面恢复 UV、素体权重迁移、表情拟合、SpringBone 检查。本路线和它有两处关键不同：头身不分开生成，以及整体生成一次只调用一个、不抽卡（都见第 2 步）。顺序上也不同：先确认结构和骨架，再做最耗时的重贴图。
 
 ## 推荐路线（逐步）
 
 | 步 | 做什么 | 关键要求 / 参考 |
 | --- | --- | --- |
 | 1 | **设定图**：整理用户立绘，得到同一姿势、同一尺度的 T 型正面和背面（侧面可靠才加） | 两张图的脚底基线、头顶、臂展像素对齐；尾巴、翅膀这类可以后装的部件先去掉；背面头发用已认可的版本。Charakuru 的 `character-three-views` 可以参考 |
-| 2 | **整体一次生成**：用 multiview_to_model 一次生成整个人物（含头、头发、身体、衣服） | 本地有效参数：face_limit 25000、quad、texture detailed、pbr false，只给正背两张图。**不要把头和身体分开生成** |
-| 3 | 灰模 + 原生贴图，看正、侧、背，与设定图对比 | 第一轮就要看贴图：画进皮肤的阴影、双尾巴、假袖子要在这里发现 |
-| 4 | **在同一网格上拆分结构** | 头发、前发、裙子、饰品、五官小件按需分成独立对象；补后脑等被遮挡的区域。拆分只改归属，不移动顶点，所以接缝保持原样 |
-| 5 | **Tripo 重贴图**：对拆好的部件做保形重贴图，再把 UV 转回原网格 | 分组参考 Charakuru 五组（hair / head / upper_body / lower_body / accessories），见 [texture-transfer.md](texture-transfer.md)、[texture-refinement-qa.md](texture-refinement-qa.md)。网格、原 UV、法线保持不变 |
+| 2 | **整体一次生成**：用 multiview_to_model 一次生成整个人物（含头、头发、身体、衣服） | 本地有效参数：face_limit 25000、quad、texture detailed、pbr false，只给正背两张图。**不要把头和身体分开生成**。**每次只提交 1 个生成任务，不并行，也不多次抽卡**：整体生成非常耗积分；等这一个检查完、确认需要时才重新生成（和 Charakuru 一次出多个候选再挑的做法不同） |
+| 3 | **灰模 + 网格结构检查，并当场试拆组件** | 拿到模型立刻看灰模和线框，手动检查各部分网格是否合理，并**在这一步就尝试拆出头、头发（含刘海）、饰品、裙子等组件**，看拆完的效果。比如刘海和头、头发和脸、裙子和腿粘成一块拆不开，或者拆开后缺面、破洞，就说明这次网格不合格，要改设定图后重新生成（仍然一次一个），不要带着问题往后做。原生贴图也在这一轮一起看 |
+| 4 | **快速绑定 + 骨架校验** | 结构通过后马上绑定，这一步花时间少、能很快发现问题。T 型模型可以用 Charakuru `avatar-weight-transfer` 做素体权重迁移，见 [rigging-physics.md](rigging-physics.md)。然后套一段现成的简单 MMD 动作（例如《愛包ダンスホール》），检查肩、肘、腕、手指、膝、颈有没有扭曲或撕裂，裙子和头发有没有跟错骨骼；发现问题就让 AI 修骨骼节点位置和权重，修好再往下做 |
+| 5 | **Tripo 重贴图**（最耗时间，放在结构和骨架都确认之后）：对拆好的部件做保形重贴图，再把 UV 转回原网格 | 分组参考 Charakuru 五组（hair / head / upper_body / lower_body / accessories），见 [texture-transfer.md](texture-transfer.md)、[texture-refinement-qa.md](texture-refinement-qa.md)。网格、原 UV、法线、权重保持不变 |
 | 6 | **表情、眼睛与嘴部** | 三样缺一不可：① 用 Charakuru `avatar-expression-authoring` 的方法论；② 目标角色的脸型不变；③ 有一个参考角色的完整表情网络（形态键）和贴图/口腔结构。没有参考角色就先找用户确认，不要直接开始做，否则表情不对、嘴部全乱。详见 [facial-expressions.md](facial-expressions.md) 开头的“前提”，以及 [eye-brow-expression-workflow.md](eye-brow-expression-workflow.md)、[mouth-transfer-vmd-repair.md](mouth-transfer-vmd-repair.md)、[eye-refinement.md](eye-refinement.md) |
-| 7 | 骨架与权重 | T 型模型可以用 Charakuru `avatar-weight-transfer` 做素体权重迁移，详见 [rigging-physics.md](rigging-physics.md)。之后做抬臂、屈肘、转头、屈膝、握拳和短动作测试 |
-| 8 | 衣服和头发物理 | SpringBone（Charakuru `avatar-spring-setup`）或 Houdini（[houdini-cloth-hair.md](houdini-cloth-hair.md)、[houdini-fullsong-remote.md](houdini-fullsong-remote.md)） |
-| 9 | 交付 | 静态模型、编辑工程、预览和缓存分目录；已完成和未完成的项目逐项如实报告 |
+| 7 | **物理**（最后做）：衣服和头发 | SpringBone（Charakuru `avatar-spring-setup`）或 Houdini（[houdini-cloth-hair.md](houdini-cloth-hair.md)、[houdini-fullsong-remote.md](houdini-fullsong-remote.md)）。依赖最终网格和骨架，所以放在最后 |
+| 8 | 交付 | 静态模型、编辑工程、预览和缓存分目录；已完成和未完成的项目逐项如实报告 |
+
+**顺序的理由**：越便宜、越快能发现问题的检查越往前放。网格结构不对就只能重新生成，而骨架问题套一段动作就能暴露；先把这两样确认好，再花大量时间做重贴图和表情，最后做依赖最终网格与骨架的物理。这样不会在一个结构有问题的模型上白做贴图。
 
 ### 为什么不把头和身体分开生成（和 Charakuru 不同）
 
@@ -43,7 +44,7 @@ Charakuru 原版是分别生成“带全部头发的头”和“T 型身体”�
 - 两套贴图的肤色和光照不一致，颈部会有明显色差；
 - 两边的拓扑没有对应关系，很难做出连续的皮肤，也就不好绑骨和刷权重。
 
-整体一次生成时，头、颈、身体本来就是一张连续的网格，比例也一致。需要分件时，在这张网格上拆分（第 4 步），再用重贴图补细节（第 5 步）。只有用户明确要求按 Charakuru 原流程制作时，才走分头身路线，并且要说明颈部焊接是主要风险。
+整体一次生成时，头、颈、身体本来就是一张连续的网格，比例也一致。需要分件时，在这张网格上拆分（第 3 步试拆），再用重贴图补细节（第 5 步）。只有用户明确要求按 Charakuru 原流程制作时，才走分头身路线，并且要说明颈部焊接是主要风险。
 
 ## 经验与禁忌
 
@@ -53,6 +54,7 @@ Charakuru 原版是分别生成“带全部头发的头”和“T 型身体”�
 - **表情不能凭空做**：必须有参考角色的表情网络和贴图，用 Charakuru 方法迁移到不变的原脸上。没有参考角色的表情网络就去推顶点、只建命名滑块，或者用重新生成的网格来做，DeepSeek 都试过，结果是表情不对、嘴部全乱。
 - 尾巴、翅膀这类部件后装：先核对原生件的根部、尖端和轴向，再缩放、旋转到真实的连接位置。
 - 每一步都要看灰模：结构问题（后脑鼓包、颈部锯齿、指缝粘连、裙子穿模）在贴图渲染里容易被盖住。
+- **生成不抽卡**：整体生成每次只提交一个任务，绝不并行，也不为了挑结果连续多抽。先认真检查这一次的结果，确定是设定图或参数的问题、改好后再生成下一次。
 - 生成和修改都存新版本目录，记录 Tripo 任务 ID、请求参数和输入图，方便以后从同一个起点重做。
 
 ## 参考与生成细节
