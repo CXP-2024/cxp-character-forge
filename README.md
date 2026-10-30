@@ -2,6 +2,12 @@
 
 **从一张角色立绘开始，由 AI agent 一步步做出能跳 MMD 舞的 3D 角色。**
 
+### ▶ [看成片：用这个 skill 做出来的 DeepSeek 鲸娘双人《愛包ダンスホール》（B 站）](https://www.bilibili.com/video/BV1ALxY6aEH9)
+
+[![DeepSeek 鲸娘双人《愛包ダンスホール》渲染预览，点击观看 B 站视频](docs/preview_aibo_dance.jpg)](https://www.bilibili.com/video/BV1ALxY6aEH9)
+
+*点击图片观看。角色模型、贴图、表情、裙子物理和渲染都由 AI agent 按本 skill 的流程完成。*
+
 这是一个给 AI 编程 agent（Claude Code、Codex）用的 skill，覆盖从零开始做 MMD 角色的整条流程：设定图 → Tripo 生成模型 → 拆件 → 绑定与骨架校验 → 分组件重贴图 → 眼睛、嘴部和表情 → 衣服和头发物理 → 套 MMD 动作 → 渲染。每一步都写了做法、验收标准，以及实际项目里踩过的坑和解决办法。
 
 它不是一键生成器。流程来自一个真实项目的整套制作：DeepSeek 鲸娘，从立绘做到双人跳完整首《愛包ダンスホール》。skill 里写明了哪些步骤做到了什么程度、哪些还需要人来把关。
