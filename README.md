@@ -102,3 +102,7 @@ scripts/houdini_song/         Houdini 裙子解算：真实多层裙、整首分
 在 Tripo 公开人物工作流和 Charakuru 方法的基础上，我们加了代理客户端、离线回归、分阶段验收流程和一整套制作经验。依赖与来源见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)；固定版本下载有 SHA-256 校验。
 
 本项目不是 Tripo 或 Charakuru 的官方产品，不包含模型资产、密钥、商业服务额度，也不附带 Charakuru 的人体和表情素材，使用这些素材请遵守它们各自的许可。skill 不承诺全自动产出合格的表情或物理：每一步都需要按文档验收，结果因角色而异。
+
+## 交流群
+
+QQ 群：**1130507071**，欢迎来做技术交流。群里聊 AI 视频、AI 建模、AI 绘画等内容，主打 agent base（dsh、Codex、Claude Code）+ 本地模型。
